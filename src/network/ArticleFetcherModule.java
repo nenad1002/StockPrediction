@@ -30,6 +30,7 @@ public class ArticleFetcherModule extends NetworkModule {
 	private static final String TITLE_TAG = "title";
 	
 	private static final String DATE_TAG = "pubDate";
+	
 
 	public ArticleFetcherModule(String stockAbbr) {
 		this.stockRssURL = this.STOCK_RSS_PREFIX_URL + stockAbbr;
@@ -91,13 +92,7 @@ public class ArticleFetcherModule extends NetworkModule {
 	}
 	
 	private NodeList fetchNodes(String rssURL) throws ParserConfigurationException, SAXException, IOException {
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		
-		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		
-		Document doc = dBuilder.parse(rssURL);
-		
-		doc.getDocumentElement().normalize();
+		Document doc = this.getDocument(rssURL);
 		
 		NodeList nList = doc.getElementsByTagName(ITEM_TAG);
 		

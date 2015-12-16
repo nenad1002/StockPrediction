@@ -12,13 +12,19 @@ import org.xml.sax.SAXException;
 
 import database.DatabaseModule;
 import network.ArticleFetcherModule;
+import network.StockHistoryModule;
 import preprocess.BagOfWordsHelper;
 
 public class Main {
 
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, SQLException {
+	
 		
 
+		StockHistoryModule stock = new StockHistoryModule();
+		
+		boolean increasing = stock.isStockIncreasing("msft");
+		
 		
 		
 		ArticleFetcherModule a  = new ArticleFetcherModule("msft");
@@ -42,7 +48,6 @@ public class Main {
 		
 		System.out.println(dictionary);
 		
-		
 		DatabaseModule db = new DatabaseModule();
 		
 		try {
@@ -55,7 +60,8 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		System.out.println(db.saveDictionary(dictionary));
+		System.out.println(db.saveDictionary(dictionary, increasing));
+		
 
 	}
 
