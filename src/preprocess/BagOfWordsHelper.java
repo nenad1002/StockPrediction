@@ -7,11 +7,15 @@ import java.util.HashMap;
 
 
 
-public class BagOfWordsHelper { // NLP technique Bag of Words
+public class BagOfWordsHelper extends StructuredWordsHelper { // NLP technique Bag of Words
 			
+	
+	public BagOfWordsHelper() {
+		super();
+	}
 
 	// method for processing words, in future possible use of weka library
-	public static ArrayList<String> processWords(ArrayList<String> articleTextList) {
+	public ArrayList<String> processWords(ArrayList<String> articleTextList) {
 		
 		ArrayList<String> originWords = separateWords(articleTextList);
 		
@@ -28,10 +32,12 @@ public class BagOfWordsHelper { // NLP technique Bag of Words
 		
 	}
 	
-	public static HashMap<String, Integer> buildDictonary(ArrayList<String> articlesText) {
+	public HashMap<String, Integer> buildDictonary(ArrayList<String> articlesText) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		
 		for (String word : articlesText) {
+			if (!checkWord(word))
+				continue;
 			if (!map.containsKey(word)) {
 				map.put(word, 0);
 			}
@@ -43,7 +49,7 @@ public class BagOfWordsHelper { // NLP technique Bag of Words
 		
 	}
 	
-	private static ArrayList<String> separateWords(ArrayList<String> articleTextList) {
+	private ArrayList<String> separateWords(ArrayList<String> articleTextList) {
 		ArrayList<String> resWords = new ArrayList<>();
 		
 		for (String s : articleTextList) {
@@ -60,7 +66,7 @@ public class BagOfWordsHelper { // NLP technique Bag of Words
 	 Converts all upper-case letters into lower-case
 	 */
 	
-	private static String setLowerCases(String s) {
+	private String setLowerCases(String s) {
 		StringBuilder res = new StringBuilder();
 		
 		for (int i = 0; i < s.length(); i++) {

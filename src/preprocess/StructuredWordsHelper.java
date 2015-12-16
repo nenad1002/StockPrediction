@@ -3,7 +3,7 @@ package preprocess;
 import java.util.HashSet;
 import java.util.Set;
 
-public class InvalidWordsHelper {
+public class StructuredWordsHelper {
 
 	
 	private static String[] invalidWords = {
@@ -15,7 +15,7 @@ public class InvalidWordsHelper {
 	
 	Set<String> invalidWordsSet;
 	
-	public InvalidWordsHelper() {
+	public StructuredWordsHelper() {
 		invalidWordsSet = new HashSet<>();
 		
 		for (int i = 0; i < invalidWords.length; i++) {
