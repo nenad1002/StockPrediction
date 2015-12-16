@@ -1,0 +1,77 @@
+package preprocess;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+
+
+
+public class BagOfWordsHelper { // NLP technique Bag of Words
+			
+
+	// method for processing words, in future possible use of weka library
+	public static ArrayList<String> processWords(ArrayList<String> articleTextList) {
+		
+		ArrayList<String> originWords = separateWords(articleTextList);
+		
+		ArrayList<String> resWords = new ArrayList<>();
+		
+		for (int i = 0; i < originWords.size(); i++) {
+			String newS = setLowerCases(originWords.get(i));
+			newS = newS.replaceAll("[^a-z]", "");
+			resWords.add(newS);
+		}
+		
+		
+		return resWords;
+		
+	}
+	
+	public static HashMap<String, Integer> buildDictonary(ArrayList<String> articlesText) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		
+		for (String word : articlesText) {
+			if (!map.containsKey(word)) {
+				map.put(word, 0);
+			}
+			map.put(word, map.get(word) + 1);
+		}
+		
+		
+		return map;
+		
+	}
+	
+	private static ArrayList<String> separateWords(ArrayList<String> articleTextList) {
+		ArrayList<String> resWords = new ArrayList<>();
+		
+		for (String s : articleTextList) {
+			String[] textWords = s.split(" ");
+			resWords.addAll(Arrays.asList(textWords));
+		}
+		
+		return resWords;
+	}
+	
+	
+	
+	/*
+	 Converts all upper-case letters into lower-case
+	 */
+	
+	private static String setLowerCases(String s) {
+		StringBuilder res = new StringBuilder();
+		
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) >= 'A' && s.charAt(i) <= 'Z')
+				res.append((char)(s.charAt(i) - 'A' + 'a'));
+			else
+				res.append(s.charAt(i));
+		}
+		
+		return res.toString();
+		
+	}
+
+}
