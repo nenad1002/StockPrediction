@@ -23,7 +23,7 @@ public class StockHistoryModule extends NetworkModule {
 	
 	private static final String CLOSE_TAG = "Close"; 
 	
-	private static final String BID_TAG = "Bid";
+	private static final String BID_TAG = "LastTradePriceOnly";
 	
 	private static final int DAY_DURATION = 24 * 60 * 60 * 1000; // duration of day in milliseconds
 

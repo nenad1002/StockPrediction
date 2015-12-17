@@ -61,7 +61,8 @@ public class DatabaseModule {
 		
 	}
 	
-	public boolean saveDictionary(HashMap<String, Integer> dictionary, boolean arePositive) throws SQLException {
+	public boolean saveDictionary(HashMap<String, Integer> dictionary, boolean arePositive, 
+			String stockIndex) throws SQLException {
 		Statement statement = null;
 	    
 	    int affectedRows = 0;
@@ -70,17 +71,17 @@ public class DatabaseModule {
 	    for (String key : dictionary.keySet()) {
 	    	int value = dictionary.get(key);
 	    	
-	    	affectedRows += saveToTable(ALL_FEATURES_TABLE, key, value, statement);
+	    	affectedRows += saveToTable(ALL_FEATURES_TABLE, key, value, stockIndex, statement);
 	    	
 	    	
 	    	if (arePositive) {
-	    		affectedRows += saveToTable(CATEGORIES_TABLE, POSITIVE, value, statement);
-	    		affectedRows += saveToTable(POSITIVE_TABLE, key, value, statement);
+	    		affectedRows += saveToTable(CATEGORIES_TABLE, POSITIVE, value, stockIndex, statement);
+	    		affectedRows += saveToTable(POSITIVE_TABLE, key, value, stockIndex, statement);
 	    	}
 	    	else {
 
-	    		affectedRows += saveToTable(CATEGORIES_TABLE, NEGATIVE, value, statement);
-	    		affectedRows += saveToTable(NEGATIVE_TABLE, key, value, statement);
+	    		affectedRows += saveToTable(CATEGORIES_TABLE, NEGATIVE, value, stockIndex, statement);
+	    		affectedRows += saveToTable(NEGATIVE_TABLE, key, value, stockIndex, statement);
 	    	}
 	    	
 	    	
@@ -91,22 +92,26 @@ public class DatabaseModule {
 	}
 	
 	public int loadData(Dictionary<String, Dictionary<String, Integer>> featureCountPerCategory, 
-			 Dictionary<String, Integer> totalFeatureCount, Dictionary<String, Integer> totalCategoryCount) throws SQLException {
+			 Dictionary<String, Integer> totalFeatureCount, Dictionary<String, Integer> totalCategoryCount,
+			 String stockIndex) throws SQLException {
 		
-		int count = populateData(totalFeatureCount, this.ALL_FEATURES_TABLE);
+		int count = populateData(totalFeatureCount, this.ALL_FEATURES_TABLE, stockIndex);
 		
-		count = populateData(totalCategoryCount, this.CATEGORIES_TABLE);
+		count = populateData(totalCategoryCount, this.CATEGORIES_TABLE, stockIndex);
 		
-		populateAdditionalData(featureCountPerCategory, this.POSITIVE_TABLE, Classifier.CLASSIFICATION_POSITIVE);
+		populateAdditionalData(featureCountPerCategory, this.POSITIVE_TABLE, 
+				Classifier.CLASSIFICATION_POSITIVE, stockIndex);
 		
-		populateAdditionalData(featureCountPerCategory, this.NEGATIVE_TABLE, Classifier.CLASSIFICATION_NEGATIVE);
+		populateAdditionalData(featureCountPerCategory, this.NEGATIVE_TABLE,
+				Classifier.CLASSIFICATION_NEGATIVE, stockIndex);
 	
 		
 		return count;
 	}
 	
-	private int populateData(Dictionary<String, Integer> dict, String table) throws SQLException {
-		ResultSet resultSet = fetchTable(table);
+	private int populateData(Dictionary<String, Integer> dict, String table, 
+			String stockIndex) throws SQLException {
+		ResultSet resultSet = fetchTable(table, stockIndex);
 		
 		int res = 0;
 		
@@ -120,8 +125,9 @@ public class DatabaseModule {
 		return res;
 	}
 	
-	private void populateAdditionalData(Dictionary<String, Dictionary<String, Integer>> featureCountPerCategory, String table, String additional) throws SQLException {
-		ResultSet resultSet = fetchTable(table);
+	private void populateAdditionalData(Dictionary<String, Dictionary<String, Integer>> featureCountPerCategory, 
+			String table, String additional, String stockIndex) throws SQLException {
+		ResultSet resultSet = fetchTable(table, stockIndex);
 		
 		while(resultSet.next()) {
 			String name = resultSet.getString(NAME_COLUMN);
@@ -132,30 +138,32 @@ public class DatabaseModule {
 	}
 	
 	
-	private ResultSet fetchTable(String tableName) throws SQLException {
+	private ResultSet fetchTable(String tableName, String stockIndex) throws SQLException {
 		Statement statement = null;
 		
 		statement = connection.createStatement();
 		
 		
-		ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + ";");
+		ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE stock = \"" +
+		stockIndex + "\";");
 		
 		return resultSet;
 	}
 	
-	private static int saveToTable(String tableName, String key, int value, Statement statement) throws SQLException {
+	private static int saveToTable(String tableName, String key, int value, String stockIndex, 
+			Statement statement) throws SQLException {
 		int affectedRows = 0;
 		ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE name = \"" +
-		    	key + "\";");
+		    	key + "\" AND stock = \"" + stockIndex + "\";");
 		    	
 		if (resultSet.next()) {
 		    	value += Integer.parseInt(resultSet.getString(COUNT_COLUMN));
 		    	affectedRows += statement.executeUpdate("DELETE FROM " + tableName + " WHERE "
-		    				+ "name = \"" + key + "\";");
+		    				+ "name = \"" + key + "\" AND stock = \"" + stockIndex +"\";");
 		    }
 		    	
 		affectedRows += statement.executeUpdate("INSERT INTO " + tableName + " VALUES(\"" +
-		    	key + "\", " + value +  ");");
+		    	key + "\", " + value +  ",\"" + stockIndex + "\");");
 		  
 		 return affectedRows;
 	}

@@ -143,12 +143,13 @@ public abstract class Classifier implements IFeatureProbability {
                 / (weight + totals);
     }
 
-       public void learn() throws ClassNotFoundException, SQLException {
+       public void learn(String stockIndex) throws ClassNotFoundException, SQLException {
     	DatabaseModule db = new DatabaseModule();
     	
     	db.tryToConnect();
     	
-    	totalNumberOfFeatures = db.loadData(featureCountPerCategory, totalFeatureCount, totalCategoryCount);
+    	totalNumberOfFeatures = db.loadData(featureCountPerCategory, totalFeatureCount, 
+    			totalCategoryCount, stockIndex);
     	
     	
     	for (String key : ((Hashtable<String, Integer>) featureCountPerCategory.get(this.CLASSIFICATION_POSITIVE)).keySet()) {

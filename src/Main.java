@@ -23,13 +23,13 @@ public class Main {
 	
 		
 		
-		saveStuffIntoDatabase("MSFT");
+		//saveStuffIntoDatabase("goog");
 		
-		//Classifier classifier = new BayesClassifier();
+		Classifier classifier = new BayesClassifier();
 		
-		//learn(classifier);
+		learn(classifier, "goog");
 		
-		//classify(classifier, "msft");
+		classify(classifier, "goog");
 		
 		
 	}
@@ -50,15 +50,14 @@ public class Main {
 		ArrayList<String> secondList = bag.processWords(list);
 	
 		
-		System.out.println(secondList);
 		System.out.println(classifier.classify(secondList));
 		
 	}
 	
-	private static void learn(Classifier classifier) {
+	private static void learn(Classifier classifier, String stockIndex) {
 		
 		try {
-			classifier.learn();
+			classifier.learn(stockIndex);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,7 +102,7 @@ public class Main {
 		}
 		
 		try {
-			System.out.println(db.saveDictionary(dictionary, increasing));
+			System.out.println(db.saveDictionary(dictionary, increasing, stockIndex));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
