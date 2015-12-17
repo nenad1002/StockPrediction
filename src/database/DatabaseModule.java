@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Properties;
 
+import bayes.Classifier;
 import credential.Credentials;
 
 public class DatabaseModule {
@@ -31,6 +33,10 @@ public class DatabaseModule {
 	private static final String POSITIVE_TABLE = "positive_features";
 	
 	private static final String NEGATIVE_TABLE = "negative_features";
+	
+	private static final String POSITIVE = "positive";
+	
+	private static final String NEGATIVE = "negative";
 	
 	Connection connection;
 	
@@ -66,10 +72,16 @@ public class DatabaseModule {
 	    	
 	    	affectedRows += saveToTable(ALL_FEATURES_TABLE, key, value, statement);
 	    	
-	    	if (arePositive)
+	    	
+	    	if (arePositive) {
+	    		affectedRows += saveToTable(CATEGORIES_TABLE, POSITIVE, value, statement);
 	    		affectedRows += saveToTable(POSITIVE_TABLE, key, value, statement);
-	    	else
+	    	}
+	    	else {
+
+	    		affectedRows += saveToTable(CATEGORIES_TABLE, NEGATIVE, value, statement);
 	    		affectedRows += saveToTable(NEGATIVE_TABLE, key, value, statement);
+	    	}
 	    	
 	    	
 	    }
@@ -78,9 +90,61 @@ public class DatabaseModule {
 		
 	}
 	
+	public int loadData(Dictionary<String, Dictionary<String, Integer>> featureCountPerCategory, 
+			 Dictionary<String, Integer> totalFeatureCount, Dictionary<String, Integer> totalCategoryCount) throws SQLException {
+		
+		int count = populateData(totalFeatureCount, this.ALL_FEATURES_TABLE);
+		
+		count = populateData(totalCategoryCount, this.CATEGORIES_TABLE);
+		
+		populateAdditionalData(featureCountPerCategory, this.POSITIVE_TABLE, Classifier.CLASSIFICATION_POSITIVE);
+		
+		populateAdditionalData(featureCountPerCategory, this.NEGATIVE_TABLE, Classifier.CLASSIFICATION_NEGATIVE);
+	
+		
+		return count;
+	}
+	
+	private int populateData(Dictionary<String, Integer> dict, String table) throws SQLException {
+		ResultSet resultSet = fetchTable(table);
+		
+		int res = 0;
+		
+		while (resultSet.next()) {
+			String name = resultSet.getString(NAME_COLUMN);
+			int count = Integer.parseInt(resultSet.getString(COUNT_COLUMN));
+			res += count;
+			dict.put(name, count);
+		}
+		
+		return res;
+	}
+	
+	private void populateAdditionalData(Dictionary<String, Dictionary<String, Integer>> featureCountPerCategory, String table, String additional) throws SQLException {
+		ResultSet resultSet = fetchTable(table);
+		
+		while(resultSet.next()) {
+			String name = resultSet.getString(NAME_COLUMN);
+			int count = Integer.parseInt(resultSet.getString(COUNT_COLUMN));
+			Dictionary<String, Integer> dict = featureCountPerCategory.get(additional);
+			dict.put(name, count);
+		}
+	}
+	
+	
+	private ResultSet fetchTable(String tableName) throws SQLException {
+		Statement statement = null;
+		
+		statement = connection.createStatement();
+		
+		
+		ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + ";");
+		
+		return resultSet;
+	}
+	
 	private static int saveToTable(String tableName, String key, int value, Statement statement) throws SQLException {
 		int affectedRows = 0;
-		
 		ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE name = \"" +
 		    	key + "\";");
 		    	
