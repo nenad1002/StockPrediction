@@ -145,7 +145,6 @@ public class DatabaseModule {
 	
 	private static int saveToTable(String tableName, String key, int value, Statement statement) throws SQLException {
 		int affectedRows = 0;
-		
 		ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE name = \"" +
 		    	key + "\";");
 		    	

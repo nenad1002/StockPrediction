@@ -75,6 +75,7 @@ public class BayesClassifier extends Classifier {
             probabilities.add(new Classification(
                     features, category,
                     this.categoryProbability(features, category)));
+        System.out.println("velicina proba " + probabilities.size());
         return probabilities;
     }
 
@@ -90,6 +91,8 @@ public class BayesClassifier extends Classifier {
 
         if (probabilites.size() > 0) {
         	//System.out.println(probabilites.first().getProbability());
+        	if (probabilites.last().getProbability() == 0.0)
+        		return probabilites.first();
             return probabilites.last();
         }
         return null;

@@ -24,9 +24,16 @@ public class BagOfWordsHelper extends StructuredWordsHelper { // NLP technique B
 		for (int i = 0; i < originWords.size(); i++) {
 			String newS = setLowerCases(originWords.get(i));
 			newS = newS.replaceAll("[^a-z]", "");
+			if (!checkWord(newS))
+				continue;
 			resWords.add(newS);
 		}
 		
+		ArrayList<String> tmpWords = new ArrayList<>(resWords);
+		
+		for (int i = 0; i < tmpWords.size() - 1; i++) {
+			resWords.add(tmpWords.get(i) + " " + tmpWords.get(i + 1));
+		}
 		
 		return resWords;
 		

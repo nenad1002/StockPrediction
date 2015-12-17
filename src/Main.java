@@ -22,13 +22,14 @@ public class Main {
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, SQLException {
 	
 		
-		//saveStuffIntoDatabase("MSFT");
 		
-		Classifier classifier = new BayesClassifier();
+		saveStuffIntoDatabase("MSFT");
 		
-		learn(classifier);
+		//Classifier classifier = new BayesClassifier();
 		
-		classify(classifier, "msft");
+		//learn(classifier);
+		
+		//classify(classifier, "msft");
 		
 		
 	}
@@ -77,7 +78,7 @@ public class Main {
 		ArticleFetcherModule a  = new ArticleFetcherModule(stockIndex);
 		
 		ArrayList<String> list = a.getArticleWords(
-				new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
+				new Date(System.currentTimeMillis()));
 
 		BagOfWordsHelper bag = new BagOfWordsHelper();
 		
