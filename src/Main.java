@@ -10,6 +10,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import bayes.BayesClassifier;
+import bayes.Classifier;
 import database.DatabaseModule;
 import network.ArticleFetcherModule;
 import network.StockHistoryModule;
@@ -20,24 +22,63 @@ public class Main {
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, SQLException {
 	
 		
+		//saveStuffIntoDatabase("MSFT");
+		
+		Classifier classifier = new BayesClassifier();
+		
+		learn(classifier);
+		
+		classify(classifier, "msft");
+		
+		
+	}
+	
+	private static void classify(Classifier classifier, String stockIndex) throws
+	ParserConfigurationException, SAXException, IOException {
+		StockHistoryModule stock = new StockHistoryModule();
+		
+		
+		
+		ArticleFetcherModule a  = new ArticleFetcherModule(stockIndex);
+		
+		ArrayList<String> list = a.getArticleWords(
+				new Date());
+
+		BagOfWordsHelper bag = new BagOfWordsHelper();
+		
+		ArrayList<String> secondList = bag.processWords(list);
+	
+		
+		System.out.println(secondList);
+		System.out.println(classifier.classify(secondList));
+		
+	}
+	
+	private static void learn(Classifier classifier) {
+		
+		try {
+			classifier.learn();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void saveStuffIntoDatabase(String stockIndex) throws ParserConfigurationException, SAXException, IOException {
 
 		StockHistoryModule stock = new StockHistoryModule();
 		
-		boolean increasing = stock.isStockIncreasing("msft");
+		boolean increasing = stock.isStockIncreasing(stockIndex);
 		
 		
-		
-		ArticleFetcherModule a  = new ArticleFetcherModule("msft");
+		ArticleFetcherModule a  = new ArticleFetcherModule(stockIndex);
 		
 		ArrayList<String> list = a.getArticleWords(
 				new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
-		
-		System.out.println(list);
-		//ArrayList<String> list = new ArrayList<String>();
-		
-		//list.add("dsfsf sdfsd qweqe'sdfdfDF");
-		//list.add("sf sdf. dsfdfsd''sdsdf");
-		
+
 		BagOfWordsHelper bag = new BagOfWordsHelper();
 		
 		ArrayList<String> secondList = bag.processWords(list);
@@ -60,9 +101,13 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		System.out.println(db.saveDictionary(dictionary, increasing));
+		try {
+			System.out.println(db.saveDictionary(dictionary, increasing));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-
 	}
 
 }

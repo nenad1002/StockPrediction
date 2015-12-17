@@ -74,12 +74,6 @@ public class StockHistoryModule extends NetworkModule {
 		
 		Document doc = getDocument(currentStockURLStr);
 		
-		/*
-		OutputFormat format = new OutputFormat(doc);
-		format.setIndenting(true);
-		XMLSerializer serializer = new XMLSerializer(System.out, format);
-		serializer.serialize(doc);
-		*/
 
 		NodeList nList = doc.getElementsByTagName(BID_TAG);
 		
