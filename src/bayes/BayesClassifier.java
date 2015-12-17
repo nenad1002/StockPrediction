@@ -31,30 +31,15 @@ public class BayesClassifier extends Classifier {
                 * featuresProbabilityProduct(features, category) ;
     }
     
-    private double featureAllProbability(String feature) {
-    	if (this.totalFeatureCount.get(feature) == null) {
-    		return 1;
-    	}
-    	return (double) this.totalFeatureCount.get(feature) / totalNumberOfFeatures;
-    }
-
-    /**
-     * Retrieves a sorted <code>Set</code> of probabilities that the given set
-     * of features is classified as the available categories.
-     *
-     * @param features The set of features to use.
-     * @return A sorted <code>Set</code> of category-probability-entries.
-     */
+   
+   
+     //Retrieves a sorted Set of probabilities that the given set
+     //of features is classified as the available categories.
+    
     private SortedSet<Classification> categoryProbabilities(
             Collection<String> features) {
 
-        /*
-         * Sort the set according to the possibilities. Because we have to sort
-         * by the mapped value and not by the mapped key, we can not use a
-         * sorted tree (TreeMap) and we have to use a set-entry approach to
-         * achieve the desired functionality. A custom comparator is therefore
-         * needed.
-         */
+  
         SortedSet<Classification> probabilities =
                 new TreeSet<Classification>(
                         new Comparator<Classification>() {
@@ -75,22 +60,17 @@ public class BayesClassifier extends Classifier {
             probabilities.add(new Classification(
                     features, category,
                     this.categoryProbability(features, category)));
-        System.out.println("velicina proba " + probabilities.size());
+       
         return probabilities;
     }
 
-    /**
-     * Classifies the given set of features.
-     *
-     * @return The category the set of features is classified as.
-     */
+
     @Override
     public Classification classify(Collection<String> features) {
         SortedSet<Classification> probabilites =
                 this.categoryProbabilities(features);
 
         if (probabilites.size() > 0) {
-        	//System.out.println(probabilites.first().getProbability());
         	if (probabilites.last().getProbability() == 0.0)
         		return probabilites.first();
             return probabilites.last();
@@ -98,12 +78,7 @@ public class BayesClassifier extends Classifier {
         return null;
     }
 
-    /**
-     * Classifies the given set of features. and return the full details of the
-     * classification.
-     *
-     * @return The set of categories the set of features is classified as.
-     */
+
     public Collection<Classification> classifyDetailed(
             Collection<String> features) {
         return this.categoryProbabilities(features);

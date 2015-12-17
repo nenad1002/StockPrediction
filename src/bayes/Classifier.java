@@ -57,11 +57,7 @@ public abstract class Classifier implements IFeatureProbability {
         return ((Hashtable<String, Integer>) this.totalCategoryCount).keySet();
     }
 
-    /**
-     * Retrieves the total number of categories the classifier knows about.
-     *
-     * @return The total category count.
-     */
+ 
     public int getCategoriesTotal() {
         int toReturn = 0;
         for (Enumeration<Integer> e = this.totalCategoryCount.elements();
@@ -85,20 +81,13 @@ public abstract class Classifier implements IFeatureProbability {
         return (count == null) ? 0 : count.intValue();
     }
 
-    /**
-     * Retrieves the number of occurrences of the given category.
-     * 
-     * @param category The category, which count should be retrieved.
-     * @return The number of occurrences.
-     */
+
     public int categoryCount(String category) {
         Integer count = this.totalCategoryCount.get(category);
         return (count == null) ? 0 : count.intValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+   
     @Override
     public double featureProbability(String feature, String category) {
         if (this.categoryCount(category) == 0)
@@ -107,73 +96,32 @@ public abstract class Classifier implements IFeatureProbability {
                 / (double) this.categoryCount(category);
     }
 
-    /**
-     * Retrieves the weighed average <code>P(feature|category)</code> with
-     * overall weight of <code>1.0</code> and an assumed probability of
-     * <code>0.5</code>. The probability defaults to the overall feature
-     * probability.
-     *
-     * @see de.daslaboratorium.machinelearning.classifier.Classifier#featureProbability(Object, Object)
-     * @see de.daslaboratorium.machinelearning.classifier.Classifier#featureWeighedAverage(Object, Object, IFeatureProbability, double, double)
-     *
-     * @param feature The feature, which probability to calculate.
-     * @param category The category.
-     * @return The weighed average probability.
-     */
+    
+     //Retrieves the weighed average P(feature|category) with
+     //overall weight of 1.0 and an assumed probability of
+     //0.5. The probability defaults to the overall feature
+     //probability.
+    
     public double featureWeighedAverage(String feature, String category) {
         return this.featureWeighedAverage(feature, category,
                 null, 1.0f, 0.5f);
     }
 
-    /**
-     * Retrieves the weighed average <code>P(feature|category)</code> with
-     * overall weight of <code>1.0</code>, an assumed probability of
-     * <code>0.5</code> and the given object to use for probability calculation.
-     *
-     * @see de.daslaboratorium.machinelearning.classifier.Classifier#featureWeighedAverage(Object, Object, IFeatureProbability, double, double)
-     *
-     * @param feature The feature, which probability to calculate.
-     * @param category The category.
-     * @param calculator The calculating object.
-     * @return The weighed average probability.
-     */
+ 
     public double featureWeighedAverage(String feature, String category,
             IFeatureProbability calculator) {
         return this.featureWeighedAverage(feature, category,
                 calculator, 1.0f, 0.5f);
     }
 
-    /**
-     * Retrieves the weighed average <code>P(feature|category)</code> with
-     * the given weight and an assumed probability of <code>0.5</code> and the
-     * given object to use for probability calculation.
-     *
-     * @see de.daslaboratorium.machinelearning.classifier.Classifier#featureWeighedAverage(Object, Object, IFeatureProbability, double, double)
-     *
-     * @param feature The feature, which probability to calculate.
-     * @param category The category.
-     * @param calculator The calculating object.
-     * @param weight The feature weight.
-     * @return The weighed average probability.
-     */
+  
     public double featureWeighedAverage(String feature, String category,
             IFeatureProbability calculator, double weight) {
         return this.featureWeighedAverage(feature, category,
                 calculator, weight, 0.5f);
     }
 
-    /**
-     * Retrieves the weighed average <code>P(feature|category)</code> with
-     * the given weight, the given assumed probability and the given object to
-     * use for probability calculation.
-     *
-     * @param feature The feature, which probability to calculate.
-     * @param category The category.
-     * @param calculator The calculating object.
-     * @param weight The feature weight.
-     * @param assumedProbability The assumed probability.
-     * @return The weighed average probability.
-     */
+  
     public double featureWeighedAverage(String feature, String category,
             IFeatureProbability calculator, double weight,
             double assumedProbability) {
@@ -195,16 +143,7 @@ public abstract class Classifier implements IFeatureProbability {
                 / (weight + totals);
     }
 
-    /**
-     * Train the classifier by telling it that the given features resulted in
-     * the given category.
-     *
-     * @param category The category the features belong to.
-     * @param features The features that resulted in the given category.
-     * @throws SQLException 
-     * @throws ClassNotFoundException 
-     */
-    public void learn() throws ClassNotFoundException, SQLException {
+       public void learn() throws ClassNotFoundException, SQLException {
     	DatabaseModule db = new DatabaseModule();
     	
     	db.tryToConnect();
@@ -220,14 +159,6 @@ public abstract class Classifier implements IFeatureProbability {
     }
 
 
-
-    /**
-     * The classify method.  It will retrieve the most likely category for the
-     * features given and depends on the concrete classifier implementation.
-     *
-     * @param features The features to classify.
-     * @return The category most likely.
-     */
     public abstract Classification classify(Collection<String> features);
 
 }
