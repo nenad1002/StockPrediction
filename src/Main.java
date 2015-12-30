@@ -22,14 +22,23 @@ public class Main {
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, SQLException {
 	
 		
+		// aapl
+		// goog
+		// msft
+		// yhoo
+		// fb
+		// amzn
+		// intc
+		// ibm
+		// twtr
+		// nvda
+		saveStuffIntoDatabase("nvda");
 		
-		//saveStuffIntoDatabase("goog");
+		//Classifier classifier = new BayesClassifier();
 		
-		Classifier classifier = new BayesClassifier();
+		//learn(classifier, "msft");
 		
-		learn(classifier, "goog");
-		
-		classify(classifier, "goog");
+		//classify(classifier, "msft");
 		
 		
 	}

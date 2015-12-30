@@ -23,7 +23,9 @@ public class StockHistoryModule extends NetworkModule {
 	
 	private static final String CLOSE_TAG = "Close"; 
 	
-	private static final String BID_TAG = "LastTradePriceOnly";
+	private static final String LOW_PRICE_TAG = "DaysLow";
+	
+	private static final String HIGH_PRICE_TAG = "DaysHigh";
 	
 	private static final int DAY_DURATION = 24 * 60 * 60 * 1000; // duration of day in milliseconds
 
@@ -56,6 +58,7 @@ public class StockHistoryModule extends NetworkModule {
 		historyStockURLStr = this.STOCK_PREV_DATA_PARTS_URL[0] + stockIndex + this.STOCK_PREV_DATA_PARTS_URL[1] +
 				dateStr + this.STOCK_PREV_DATA_PARTS_URL[2]  + dateStr + this.STOCK_PREV_DATA_PARTS_URL[3];
 		
+		System.out.println(historyStockURLStr);
 		Document doc = getDocument(historyStockURLStr);
 		
 		NodeList nList = doc.getElementsByTagName(CLOSE_TAG);
@@ -75,11 +78,12 @@ public class StockHistoryModule extends NetworkModule {
 		Document doc = getDocument(currentStockURLStr);
 		
 
-		NodeList nList = doc.getElementsByTagName(BID_TAG);
+		NodeList nLowList = doc.getElementsByTagName(this.LOW_PRICE_TAG);
 		
-		Element el = (Element) nList.item(0);
+		NodeList nHighList = doc.getElementsByTagName(this.HIGH_PRICE_TAG);
 		
-		double res = Double.parseDouble(el.getTextContent());
+		Element elLow = (Element) nLowList.item(0), elHigh = (Element) nHighList.item(0);
+		double res = (Double.parseDouble(elLow.getTextContent()) + Double.parseDouble(elHigh.getTextContent()))/2;
 		
 		return res;
 		
