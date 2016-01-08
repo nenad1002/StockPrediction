@@ -101,7 +101,7 @@ public class Runner {
 		}
 	}
 	
-	private static void saveStuffIntoDatabase(String stockIndex) throws ParserConfigurationException, SAXException, IOException {
+	public static void saveStuffIntoDatabase(String stockIndex) throws ParserConfigurationException, SAXException, IOException {
 
 		StockHistoryModule stock = new StockHistoryModule();
 		

@@ -32,6 +32,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 
 
@@ -51,6 +53,10 @@ public class MainWindow {
 	JLabel infoLabel = null;
 	
 	JLabel infoClassLabel = null;
+	
+	JButton classifyButton = null;
+	
+	JButton saveButton = null;
 	
 	/**
 	 * Launch the application.
@@ -83,86 +89,166 @@ public class MainWindow {
 		frame.setBounds(100, 100, 600, 400);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
-		JLabel lblChooseIndexOf = new JLabel("Choose index of a stock you wish to classify");
+		JLabel lblChooseIndexOf = new JLabel("Choose index of a stock you wish to classify or save new data into database:");
 		GridBagConstraints gbc_lblChooseIndexOf = new GridBagConstraints();
-		gbc_lblChooseIndexOf.gridwidth = 17;
+		gbc_lblChooseIndexOf.gridwidth = 21;
 		gbc_lblChooseIndexOf.insets = new Insets(0, 0, 5, 5);
 		gbc_lblChooseIndexOf.gridx = 1;
-		gbc_lblChooseIndexOf.gridy = 0;
+		gbc_lblChooseIndexOf.gridy = 2;
 		frame.getContentPane().add(lblChooseIndexOf, gbc_lblChooseIndexOf);
 		
-		comboBox = new JComboBox(stockIndexes);
-		GridBagConstraints gbc_comboBox = new GridBagConstraints();
-		gbc_comboBox.gridwidth = 12;
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 4;
-		gbc_comboBox.gridy = 1;
-		frame.getContentPane().add(comboBox, gbc_comboBox);
-		
-		JButton btnNewButton = new JButton("Classify");
-		btnNewButton.addActionListener(new ActionListener() {
+		classifyButton = new JButton("Classify");
+		classifyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				infoLabel.setText("Please wait");
+				infoClassLabel.setText("");
+				
+				classifyButton.setEnabled(false);
+				saveButton.setEnabled(false);
+				
 				String stockIndex = comboBox.getSelectedItem().toString();
 				
-				try {
-					infoLabel.setText("Please wait");
-					infoClassLabel.setText("");
-					Runner.StockInfo classification = Runner.classify(stockIndex);
-					infoLabel.setText("Stock is in reality " + (classification.isIncreasing ? " rising " : " faling ") + ", while my classifier got the stock"
-							+ " is " + (classification.classified ? "rising." : "falling."));
+				Runnable runnable = new Runnable() {
+
+					@Override
+					public void run() {
+						
+						try {
+							Runner.StockInfo classification = Runner.classify(stockIndex);
+							infoLabel.setText("Stock is in reality " + (classification.isIncreasing ? " rising " : " faling ") + ", while my classifier got the stock"
+									+ " is " + (classification.classified ? "rising." : "falling."));
+							
+							if (classification.isIncreasing == classification.classified) {
+								infoClassLabel.setText("CORRECT CLASSIFICATION");
+								infoClassLabel.setForeground(Color.GREEN);
+							}
+							else {
+								infoClassLabel.setText("WRONG CLASSIFICATION");
+								infoClassLabel.setForeground(Color.RED);
+							}
+							
+							classifyButton.setEnabled(true);
+							saveButton.setEnabled(true);
+						} catch (ParserConfigurationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (SAXException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						
+					}
 					
-					if (classification.isIncreasing == classification.classified) {
-						infoClassLabel.setText("CORRECT CLASSIFICATION");
-						infoClassLabel.setForeground(Color.GREEN);
-					}
-					else {
-						infoClassLabel.setText("WRONG CLASSIFICATION");
-						infoClassLabel.setForeground(Color.RED);
-					}
-				} catch (ParserConfigurationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SAXException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				};
+				
+				Thread fetchDataThread = new Thread(runnable);
+				
+				fetchDataThread.start();
+				
+			
 			}
 		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.gridwidth = 3;
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton.gridx = 16;
+		gbc_btnNewButton.gridheight = 5;
+		gbc_btnNewButton.gridwidth = 2;
+		gbc_btnNewButton.insets = new Insets(0, 0, 8, 5);
+		gbc_btnNewButton.gridx = 18;
 		gbc_btnNewButton.gridy = 1;
-		frame.getContentPane().add(btnNewButton, gbc_btnNewButton);
+		frame.getContentPane().add(classifyButton, gbc_btnNewButton);
 		
-		infoLabel = new JLabel("New label");
+		saveButton = new JButton("Save into database");
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				infoLabel.setText("Please wait");
+				infoClassLabel.setText("");
+				
+				classifyButton.setEnabled(false);
+				saveButton.setEnabled(false);
+				
+				String stockIndex = comboBox.getSelectedItem().toString();
+				
+				Runnable runnable = new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							Runner.saveStuffIntoDatabase(stockIndex);
+						} catch (ParserConfigurationException | SAXException | IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						infoLabel.setText("Data saved into database");
+						classifyButton.setEnabled(true);
+						saveButton.setEnabled(true);
+						
+					}
+					
+				};
+				
+				Thread thread = new Thread(runnable);
+				
+				thread.start();
+			}
+		});
+		
+		comboBox = new JComboBox(stockIndexes);
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.gridwidth = 13;
+		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.gridx = 4;
+		gbc_comboBox.gridy = 3;
+		frame.getContentPane().add(comboBox, gbc_comboBox);
+		
+		infoLabel = new JLabel("sdfsdfsdf");
 		GridBagConstraints gbc_infoLabel = new GridBagConstraints();
+		gbc_infoLabel.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_infoLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_infoLabel.gridheight = 3;
-		gbc_infoLabel.gridwidth = 17;
-		gbc_infoLabel.gridx = 2;
-		gbc_infoLabel.gridy = 3;
+		gbc_infoLabel.gridwidth = 15;
+		gbc_infoLabel.gridx = 5;
+		gbc_infoLabel.gridy = 10;
 		frame.getContentPane().add(infoLabel, gbc_infoLabel);
+		saveButton.setBackground(Color.LIGHT_GRAY);
+		saveButton.setForeground(Color.RED);
+		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_1.gridx = 19;
+		gbc_btnNewButton_1.gridy = 5;
+		frame.getContentPane().add(saveButton, gbc_btnNewButton_1);
 		
-		infoClassLabel = new JLabel("klasifikacija");
+		infoClassLabel = new JLabel("sfdf");
 		infoClassLabel.setFont(new Font("Skia", Font.BOLD, 21));
 		GridBagConstraints gbc_infoClassLabel = new GridBagConstraints();
+		gbc_infoClassLabel.anchor = GridBagConstraints.WEST;
 		gbc_infoClassLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_infoClassLabel.gridheight = 3;
-		gbc_infoClassLabel.gridwidth = 13;
-		gbc_infoClassLabel.gridx = 6;
-		gbc_infoClassLabel.gridy = 8;
+		gbc_infoClassLabel.gridwidth = 15;
+		gbc_infoClassLabel.gridx = 5;
+		gbc_infoClassLabel.gridy = 11;
 		frame.getContentPane().add(infoClassLabel, gbc_infoClassLabel);
+		
+		JButton btnAboutApp = new JButton("About app");
+		btnAboutApp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "App by Nenad Banfic");
+			}
+		});
+		GridBagConstraints gbc_btnAboutApp = new GridBagConstraints();
+		gbc_btnAboutApp.insets = new Insets(0, 0, 5, 5);
+		gbc_btnAboutApp.gridx = 19;
+		gbc_btnAboutApp.gridy = 14;
+		frame.getContentPane().add(btnAboutApp, gbc_btnAboutApp);
 		
 		
 	}
