@@ -11,13 +11,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import bayes.BayesClassifier;
+import bayes.Classification;
 import bayes.Classifier;
 import database.DatabaseModule;
 import network.ArticleFetcherModule;
 import network.StockHistoryModule;
 import preprocess.BagOfWordsHelper;
 
-public class Main {
+public class Runner {
 
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, SQLException {
 	
@@ -27,27 +28,49 @@ public class Main {
 		// msft
 		// yhoo
 		// fb
+		
 		// amzn
 		// intc
 		// ibm
 		// twtr
 		// nvda
-		saveStuffIntoDatabase("nvda");
+		//saveStuffIntoDatabase("nvda");
 		
-		//Classifier classifier = new BayesClassifier();
+	Classifier classifier = new BayesClassifier();
 		
-		//learn(classifier, "msft");
+		learn(classifier, "intc");
 		
-		//classify(classifier, "msft");
+		classify(classifier, "intc");
 		
 		
 	}
 	
-	private static void classify(Classifier classifier, String stockIndex) throws
-	ParserConfigurationException, SAXException, IOException {
+	public static class StockInfo {
+		boolean isIncreasing;
+		
+		boolean classified;
+		
+		StockInfo(boolean isIncreasing, boolean classified) {
+			this.isIncreasing = isIncreasing;
+			this.classified = classified;
+		}
+	}
+	public static StockInfo classify(String stockIndex) throws ParserConfigurationException, SAXException, IOException {
+		Classifier classifier = new BayesClassifier();
+		
 		StockHistoryModule stock = new StockHistoryModule();
 		
+		boolean increasing = stock.isStockIncreasing(stockIndex);
 		
+		learn(classifier, stockIndex);
+		
+		Classification classification = classify(classifier, stockIndex);
+		
+		return new StockInfo(increasing, classification.getCategory().equals("positive") ? true : false);
+	}
+	
+	private static Classification classify(Classifier classifier, String stockIndex) throws
+	ParserConfigurationException, SAXException, IOException {	
 		
 		ArticleFetcherModule a  = new ArticleFetcherModule(stockIndex);
 		
@@ -60,6 +83,8 @@ public class Main {
 	
 		
 		System.out.println(classifier.classify(secondList));
+		
+		return classifier.classify(secondList);
 		
 	}
 	
