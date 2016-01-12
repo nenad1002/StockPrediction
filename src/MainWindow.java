@@ -143,15 +143,17 @@ public class MainWindow {
 								infoClassLabel.setText(WRONG_CLASSIFICATION);
 								infoClassLabel.setForeground(Color.RED);
 							}
-							
-							classifyButton.setEnabled(true);
-							saveButton.setEnabled(true);
+						
 						} catch (ParserConfigurationException e1) {
 							e1.printStackTrace();
 						} catch (SAXException e1) {
 							e1.printStackTrace();
 						} catch (IOException e1) {
 							e1.printStackTrace();
+						}
+						finally {
+							classifyButton.setEnabled(true);
+							saveButton.setEnabled(true);
 						}
 						
 						
@@ -191,14 +193,15 @@ public class MainWindow {
 					public void run() {
 						try {
 							Runner.saveStuffIntoDatabase(stockIndex);
-						} catch (ParserConfigurationException | SAXException | IOException e) {
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						
-						infoLabel.setText(DATA_SAVED);
-						classifyButton.setEnabled(true);
-						saveButton.setEnabled(true);
-						
+						finally {
+							infoLabel.setText(DATA_SAVED);
+							classifyButton.setEnabled(true);
+							saveButton.setEnabled(true);	
+						}
+									
 					}
 					
 				};
