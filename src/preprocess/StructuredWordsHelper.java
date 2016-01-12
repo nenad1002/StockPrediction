@@ -6,7 +6,7 @@ import java.util.Set;
 public class StructuredWordsHelper {
 
 	
-	private static String[] invalidWords = {
+	private static String[] invalidWords = { // hardcoded some words with no values
 			"", " ", "a", "about", "also", "almost", "an", "and", "any",
 			"are", "as", "at", "but", "by", "d", "else", "etc", "for", "from",
 			"has", "have", "in", "is", "it", "its", "of", "on", "or", "over",

@@ -19,6 +19,17 @@ import static information.StockIndexes.YHOO;
 import static information.StockIndexes.TWTR;
 import static information.StockIndexes.NVDA;
 
+import static information.GUIText.INTRO_TEXT;
+import static information.GUIText.ABOUT_APP;
+import static information.GUIText.ABOUT_APP_INFO;
+import static information.GUIText.CLASSIFY;
+import static information.GUIText.CORRECT_CLASSIFICATION;
+import static information.GUIText.DATA_SAVED;
+import static information.GUIText.INTRO_TEXT;
+import static information.GUIText.PLEASE_WAIT;
+import static information.GUIText.SAVE_DATABASE;
+import static information.GUIText.WRONG_CLASSIFICATION;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -95,7 +106,7 @@ public class MainWindow {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
-		JLabel lblChooseIndexOf = new JLabel("Choose index of a stock you wish to classify or save new data into database:");
+		JLabel lblChooseIndexOf = new JLabel(INTRO_TEXT);
 		GridBagConstraints gbc_lblChooseIndexOf = new GridBagConstraints();
 		gbc_lblChooseIndexOf.gridwidth = 21;
 		gbc_lblChooseIndexOf.insets = new Insets(0, 0, 5, 5);
@@ -103,10 +114,10 @@ public class MainWindow {
 		gbc_lblChooseIndexOf.gridy = 2;
 		frame.getContentPane().add(lblChooseIndexOf, gbc_lblChooseIndexOf);
 		
-		classifyButton = new JButton("Classify");
+		classifyButton = new JButton(CLASSIFY);
 		classifyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				infoLabel.setText("Please wait");
+				infoLabel.setText(PLEASE_WAIT);
 				infoClassLabel.setText("");
 				
 				classifyButton.setEnabled(false);
@@ -125,24 +136,21 @@ public class MainWindow {
 									+ " is " + (classification.classified ? "rising." : "falling."));
 							
 							if (classification.isIncreasing == classification.classified) {
-								infoClassLabel.setText("CORRECT CLASSIFICATION");
+								infoClassLabel.setText(CORRECT_CLASSIFICATION);
 								infoClassLabel.setForeground(Color.GREEN);
 							}
 							else {
-								infoClassLabel.setText("WRONG CLASSIFICATION");
+								infoClassLabel.setText(WRONG_CLASSIFICATION);
 								infoClassLabel.setForeground(Color.RED);
 							}
 							
 							classifyButton.setEnabled(true);
 							saveButton.setEnabled(true);
 						} catch (ParserConfigurationException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (SAXException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						
@@ -166,10 +174,10 @@ public class MainWindow {
 		gbc_btnNewButton.gridy = 1;
 		frame.getContentPane().add(classifyButton, gbc_btnNewButton);
 		
-		saveButton = new JButton("Save into database");
+		saveButton = new JButton(SAVE_DATABASE);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				infoLabel.setText("Please wait");
+				infoLabel.setText(PLEASE_WAIT);
 				infoClassLabel.setText("");
 				
 				classifyButton.setEnabled(false);
@@ -184,11 +192,10 @@ public class MainWindow {
 						try {
 							Runner.saveStuffIntoDatabase(stockIndex);
 						} catch (ParserConfigurationException | SAXException | IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						
-						infoLabel.setText("Data saved into database");
+						infoLabel.setText(DATA_SAVED);
 						classifyButton.setEnabled(true);
 						saveButton.setEnabled(true);
 						
@@ -211,7 +218,7 @@ public class MainWindow {
 		gbc_comboBox.gridy = 3;
 		frame.getContentPane().add(comboBox, gbc_comboBox);
 		
-		infoLabel = new JLabel("sdfsdfsdf");
+		infoLabel = new JLabel("");
 		GridBagConstraints gbc_infoLabel = new GridBagConstraints();
 		gbc_infoLabel.anchor = GridBagConstraints.SOUTHWEST;
 		gbc_infoLabel.insets = new Insets(0, 0, 5, 5);
@@ -227,7 +234,7 @@ public class MainWindow {
 		gbc_btnNewButton_1.gridy = 5;
 		frame.getContentPane().add(saveButton, gbc_btnNewButton_1);
 		
-		infoClassLabel = new JLabel("sfdf");
+		infoClassLabel = new JLabel("");
 		infoClassLabel.setFont(new Font("Skia", Font.BOLD, 21));
 		GridBagConstraints gbc_infoClassLabel = new GridBagConstraints();
 		gbc_infoClassLabel.anchor = GridBagConstraints.WEST;
@@ -238,10 +245,10 @@ public class MainWindow {
 		gbc_infoClassLabel.gridy = 11;
 		frame.getContentPane().add(infoClassLabel, gbc_infoClassLabel);
 		
-		JButton btnAboutApp = new JButton("About app");
+		JButton btnAboutApp = new JButton(ABOUT_APP);
 		btnAboutApp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "App by Nenad Banfic");
+				JOptionPane.showMessageDialog(null, ABOUT_APP_INFO);
 			}
 		});
 		GridBagConstraints gbc_btnAboutApp = new GridBagConstraints();

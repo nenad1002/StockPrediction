@@ -20,30 +20,7 @@ import preprocess.BagOfWordsHelper;
 
 public class Runner {
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, SQLException {
-	
-		
-		// aapl
-		// goog
-		// msft
-		// yhoo
-		// fb
-		
-		// amzn
-		// intc
-		// ibm
-		// twtr
-		// nvda
-		//saveStuffIntoDatabase("nvda");
-		
-	Classifier classifier = new BayesClassifier();
-		
-		learn(classifier, "intc");
-		
-		classify(classifier, "intc");
-		
-		
-	}
+	private static final String POSITIVE = "positive";
 	
 	public static class StockInfo {
 		boolean isIncreasing;
@@ -66,7 +43,7 @@ public class Runner {
 		
 		Classification classification = classify(classifier, stockIndex);
 		
-		return new StockInfo(increasing, classification.getCategory().equals("positive") ? true : false);
+		return new StockInfo(increasing, classification.getCategory().equals(POSITIVE) ? true : false);
 	}
 	
 	private static Classification classify(Classifier classifier, String stockIndex) throws
@@ -93,10 +70,8 @@ public class Runner {
 		try {
 			classifier.learn(stockIndex);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -123,22 +98,19 @@ public class Runner {
 		
 		System.out.println(dictionary);
 		
-		DatabaseModule db = new DatabaseModule();
+		DatabaseModule db = DatabaseModule.getInstance();
 		
 		try {
 			System.out.println(db.tryToConnect());
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		try {
 			System.out.println(db.saveDictionary(dictionary, increasing, stockIndex));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -38,12 +38,19 @@ public class DatabaseModule {
 	
 	private static final String NEGATIVE = "negative";
 	
-	Connection connection;
+	Connection connection = null;
 	
-	public DatabaseModule() {
+	private static DatabaseModule instance = null;
 	
-		this.connection = null;
+	private DatabaseModule() {
 		
+	}
+	
+	public static DatabaseModule getInstance() { //Singleton for database connection
+		if (instance == null)
+			instance = new DatabaseModule();
+		
+		return instance;
 	}
 	
 	public boolean tryToConnect() throws ClassNotFoundException, SQLException {
@@ -139,6 +146,7 @@ public class DatabaseModule {
 	
 	
 	private ResultSet fetchTable(String tableName, String stockIndex) throws SQLException {
+		// for now we don't worry about possible SQL injections 
 		Statement statement = null;
 		
 		statement = connection.createStatement();
