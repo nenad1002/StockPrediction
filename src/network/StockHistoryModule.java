@@ -27,7 +27,7 @@ public class StockHistoryModule extends NetworkModule {
 	
 	private static final String HIGH_PRICE_TAG = "DaysHigh";
 	
-	private static final int DAY_DURATION = 24 * 60 * 60 * 1000; // duration of day in milliseconds
+	private static final int DAY_DURATION = 2 * 24 * 60 * 60 * 1000; // duration of day in milliseconds
 
 	public StockHistoryModule() {
 		

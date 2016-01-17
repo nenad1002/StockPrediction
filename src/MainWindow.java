@@ -29,6 +29,7 @@ import static information.GUIText.INTRO_TEXT;
 import static information.GUIText.PLEASE_WAIT;
 import static information.GUIText.SAVE_DATABASE;
 import static information.GUIText.WRONG_CLASSIFICATION;
+import static information.GUIText.ERROR_OCCURRED;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -97,7 +98,7 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 600, 400);
+		frame.setBounds(100, 100, 500, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -111,7 +112,7 @@ public class MainWindow {
 		gbc_lblChooseIndexOf.gridwidth = 21;
 		gbc_lblChooseIndexOf.insets = new Insets(0, 0, 5, 5);
 		gbc_lblChooseIndexOf.gridx = 1;
-		gbc_lblChooseIndexOf.gridy = 2;
+		gbc_lblChooseIndexOf.gridy = 1;
 		frame.getContentPane().add(lblChooseIndexOf, gbc_lblChooseIndexOf);
 		
 		classifyButton = new JButton(CLASSIFY);
@@ -132,23 +133,40 @@ public class MainWindow {
 						
 						try {
 							Runner.StockInfo classification = Runner.classify(stockIndex);
-							infoLabel.setText("Stock is in reality " + (classification.isIncreasing ? " rising " : " faling ") + ", while my classifier got the stock"
-									+ " is " + (classification.classified ? "rising." : "falling."));
 							
-							if (classification.isIncreasing == classification.classified) {
-								infoClassLabel.setText(CORRECT_CLASSIFICATION);
-								infoClassLabel.setForeground(Color.GREEN);
+							if (classification == null) {
+							infoLabel.setText("");
+							infoClassLabel.setText(ERROR_OCCURRED);
+							
 							}
 							else {
-								infoClassLabel.setText(WRONG_CLASSIFICATION);
-								infoClassLabel.setForeground(Color.RED);
+								infoLabel.setText("Stock is in reality " + (classification.isIncreasing ? " rising " : " faling ") + ", while my classifier got the stock"
+										+ " is " + (classification.classified ? "rising." : "falling."));
+							
+								if (classification.isIncreasing == classification.classified) {
+									infoLabel.setText("");
+									infoClassLabel.setText(CORRECT_CLASSIFICATION);
+									Color color = new Color(0, 204, 0);
+									infoClassLabel.setForeground(color);
+								}
+								else {
+									infoLabel.setText("");
+									infoClassLabel.setText(WRONG_CLASSIFICATION);
+									infoClassLabel.setForeground(Color.RED);
+								}
 							}
 						
 						} catch (ParserConfigurationException e1) {
+							infoLabel.setText("");
+							infoClassLabel.setText(ERROR_OCCURRED);
 							e1.printStackTrace();
 						} catch (SAXException e1) {
+							infoLabel.setText("");
+							infoClassLabel.setText(ERROR_OCCURRED);
 							e1.printStackTrace();
 						} catch (IOException e1) {
+							infoLabel.setText("");
+							infoClassLabel.setText(ERROR_OCCURRED);
 							e1.printStackTrace();
 						}
 						finally {
@@ -171,9 +189,9 @@ public class MainWindow {
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridheight = 5;
 		gbc_btnNewButton.gridwidth = 2;
-		gbc_btnNewButton.insets = new Insets(0, 0, 8, 5);
+		gbc_btnNewButton.insets = new Insets(0, 0, 7, 5);
 		gbc_btnNewButton.gridx = 18;
-		gbc_btnNewButton.gridy = 1;
+		gbc_btnNewButton.gridy = 2;
 		frame.getContentPane().add(classifyButton, gbc_btnNewButton);
 		
 		saveButton = new JButton(SAVE_DATABASE);
@@ -194,6 +212,8 @@ public class MainWindow {
 						try {
 							Runner.saveStuffIntoDatabase(stockIndex);
 						} catch (Exception e) {
+							infoLabel.setText("");
+							infoClassLabel.setText(ERROR_OCCURRED);
 							e.printStackTrace();
 						}
 						finally {
@@ -215,10 +235,10 @@ public class MainWindow {
 		comboBox = new JComboBox(stockIndexes);
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.gridwidth = 13;
-		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBox.insets = new Insets(0, 1, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboBox.gridx = 4;
-		gbc_comboBox.gridy = 3;
+		gbc_comboBox.gridx = 2;
+		gbc_comboBox.gridy = 2;
 		frame.getContentPane().add(comboBox, gbc_comboBox);
 		
 		infoLabel = new JLabel("");
@@ -234,7 +254,7 @@ public class MainWindow {
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton_1.gridx = 19;
-		gbc_btnNewButton_1.gridy = 5;
+		gbc_btnNewButton_1.gridy = 7;
 		frame.getContentPane().add(saveButton, gbc_btnNewButton_1);
 		
 		infoClassLabel = new JLabel("");
@@ -257,7 +277,7 @@ public class MainWindow {
 		GridBagConstraints gbc_btnAboutApp = new GridBagConstraints();
 		gbc_btnAboutApp.insets = new Insets(0, 0, 5, 5);
 		gbc_btnAboutApp.gridx = 19;
-		gbc_btnAboutApp.gridy = 14;
+		gbc_btnAboutApp.gridy = 18;
 		frame.getContentPane().add(btnAboutApp, gbc_btnAboutApp);
 		
 		

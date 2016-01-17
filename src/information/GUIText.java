@@ -2,7 +2,7 @@ package information;
 
 public class GUIText {
 	
-	public static final String INTRO_TEXT = "Choose index of a stock you wish to classify or save new data into database:";
+	public static final String INTRO_TEXT = "Choose index of a stock you wish to classify or save into database:";
 	
 	public static final String CLASSIFY = "Classify";
 
@@ -11,6 +11,8 @@ public class GUIText {
 	public static final String CORRECT_CLASSIFICATION = "CORRECT CLASSIFICATION";
 	
 	public static final String WRONG_CLASSIFICATION = "WRONG CLASSIFICATION";
+	
+	public static final String ERROR_OCCURRED = "ERROR OCCURRED";
 	
 	public static final String SAVE_DATABASE = "Save into database";
 	

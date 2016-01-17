@@ -43,6 +43,9 @@ public class Runner {
 		
 		Classification classification = classify(classifier, stockIndex);
 		
+		if (classification == null)
+			return null;
+		
 		return new StockInfo(increasing, classification.getCategory().equals(POSITIVE) ? true : false);
 	}
 	
