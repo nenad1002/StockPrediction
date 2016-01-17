@@ -6,7 +6,7 @@ I am using [git-flow](https://github.com/nvie/gitflow) model. The most stable so
 I am using naive bayes classifier and Yahoo API to predict whether is stock going to rise or fall in the following few hours. I've also designed SQL database to save words from articles (and num. of their occurences), so that classifier can use past data to easily predict future. This implementation is currently in testing phase.
 
 App uses simple GUI:
-![alt tag](http://oi66.tinypic.com/10qmgc7.jpg)
+![alt tag](http://s8.postimg.org/eftdxx751/Screen_Shot_2016_01_17_at_12_27_16_AM.png)
 
 Stay tuned for implementation of a neural network instead of the naive bayes classifier.
 
