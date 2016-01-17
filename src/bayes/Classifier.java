@@ -144,7 +144,7 @@ public abstract class Classifier implements IFeatureProbability {
     }
 
        public void learn(String stockIndex) throws ClassNotFoundException, SQLException {
-    	DatabaseModule db = new DatabaseModule();
+    	DatabaseModule db = DatabaseModule.getInstance();
     	
     	db.tryToConnect();
     	
