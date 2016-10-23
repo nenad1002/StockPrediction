@@ -1,5 +1,5 @@
 # StockPrediction
-Use of machine learning algorithms to predict a stock price based on article news (to extract words I use boilerpipe)
+Use of machine learning algorithms to predict a stock price based on news articles (to extract the words I use boilerpipe).
 
 I am using [git-flow](https://github.com/nvie/gitflow) model. The most stable sources are available in master branch, while the latest ones are in development branch.
 
