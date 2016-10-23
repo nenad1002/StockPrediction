@@ -10,4 +10,6 @@ App uses simple GUI:
 
 Stay tuned for the implementation of a neural network instead of the naive bayes classifier.
 
-Feel free to make pull request.
+Feel free to make a pull request.
+
+NOTICE: Code needs to be refactored, expect that to be done until 1/12/2016.
