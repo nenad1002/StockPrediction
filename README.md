@@ -12,4 +12,4 @@ Stay tuned for the implementation of a neural network instead of the naive bayes
 
 Feel free to make a pull request.
 
-NOTICE: Code needs to be refactored, expect that to be done until 1/12/2016.
+NOTICE: Code needs to be refactored, expect that to be done until 1/1/2017.
