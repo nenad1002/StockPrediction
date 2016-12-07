@@ -6,7 +6,7 @@ public class Credentials {
 	
 	public static final String DATABASE_USER = "root";
 	
-	public static final String DATABASE_PASSWORD = "marelica";
+	public static final String DATABASE_PASSWORD = "jabucica";
 	
 	public Credentials() {
 		
