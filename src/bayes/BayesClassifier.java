@@ -1,18 +1,16 @@
 package bayes;
 
-
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
- //features: classify(feat1,...,featN) = argmax(P(cat)*PROD(P(featI|cat)
- //http://en.wikipedia.org/wiki/Naive_Bayes_classifier
+// features: classify(feat1,...,featN) = argmax(P(cat)*PROD(P(featI|cat)
+// http://en.wikipedia.org/wiki/Naive_Bayes_classifier
  
 public class BayesClassifier extends Classifier {
 
-    // Calculates the product of all feature probabilities: PROD(P(featI|cat)
-   
+    // Calculates the product of all feature probabilities: PROD(P(featI|cat).
     private double featuresProbabilityProduct(Collection<String> features,
             String category) {
         double product = 1.0f;
@@ -20,30 +18,22 @@ public class BayesClassifier extends Classifier {
             product += Math.log(this.featureWeighedAverage(feature, category));
         return product;
     }
-
  
-     //Calculates the probability that the features can be classified as the
-     //category given.
-  
+    //Calculates the probability that the features can be classified as the
+    //category given.
     private double categoryProbability(Collection<String> features, String category) {
         return ((double) this.categoryCount(category)
                     / (double) this.getCategoriesTotal())
                 * featuresProbabilityProduct(features, category) ;
     }
-    
-   
-   
-     //Retrieves a sorted Set of probabilities that the given set
-     //of features is classified as the available categories.
-    
+ 
+    //Retrieves a sorted Set of probabilities that the given set
+    //of features is classified as the available categories.
     private SortedSet<Classification> categoryProbabilities(
             Collection<String> features) {
-
-  
         SortedSet<Classification> probabilities =
                 new TreeSet<Classification>(
                         new Comparator<Classification>() {
-
                     @Override
                     public int compare(Classification o1,
                             Classification o2) {
@@ -64,7 +54,6 @@ public class BayesClassifier extends Classifier {
         return probabilities;
     }
 
-
     @Override
     public Classification classify(Collection<String> features) {
         SortedSet<Classification> probabilites =
@@ -77,8 +66,7 @@ public class BayesClassifier extends Classifier {
         }
         return null;
     }
-
-
+ 
     public Collection<Classification> classifyDetailed(
             Collection<String> features) {
         return this.categoryProbabilities(features);
