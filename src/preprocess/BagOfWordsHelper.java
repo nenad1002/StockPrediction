@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-
-
-
-public class BagOfWordsHelper extends StructuredWordsHelper { // NLP technique Bag of Words
+// NLP technique Bag of Words.
+public class BagOfWordsHelper extends StructuredWordsHelper {
 			
-	
 	public BagOfWordsHelper() {
 		super();
 	}
 
-	// method for processing words, in future possible use of weka library
+	// Method for processing words, in future possible use of weka library.
 	public ArrayList<String> processWords(ArrayList<String> articleTextList) {
 		
 		ArrayList<String> originWords = separateWords(articleTextList);
@@ -33,10 +30,8 @@ public class BagOfWordsHelper extends StructuredWordsHelper { // NLP technique B
 		
 		for (int i = 0; i < tmpWords.size() - 1; i++) {
 			resWords.add(tmpWords.get(i) + " " + tmpWords.get(i + 1));
-		}
-		
-		return resWords;
-		
+		}	
+		return resWords;	
 	}
 	
 	public HashMap<String, Integer> buildDictonary(ArrayList<String> articlesText) {
@@ -50,10 +45,7 @@ public class BagOfWordsHelper extends StructuredWordsHelper { // NLP technique B
 			}
 			map.put(word, map.get(word) + 1);
 		}
-		
-		
-		return map;
-		
+		return map;	
 	}
 	
 	private ArrayList<String> separateWords(ArrayList<String> articleTextList) {
@@ -63,16 +55,9 @@ public class BagOfWordsHelper extends StructuredWordsHelper { // NLP technique B
 			String[] textWords = s.split(" ");
 			resWords.addAll(Arrays.asList(textWords));
 		}
-		
 		return resWords;
 	}
-	
-	
-	
-	/*
-	 Converts all upper-case letters into lower-case
-	 */
-	
+	// Converts all the upper-case letters into lower-case letters.
 	private String setLowerCases(String s) {
 		StringBuilder res = new StringBuilder();
 		
