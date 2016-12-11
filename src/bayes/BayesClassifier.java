@@ -7,7 +7,6 @@ import java.util.TreeSet;
 
 // features: classify(feat1,...,featN) = argmax(P(cat)*PROD(P(featI|cat)
 // http://en.wikipedia.org/wiki/Naive_Bayes_classifier
- 
 public class BayesClassifier extends Classifier {
 
     // Calculates the product of all feature probabilities: PROD(P(featI|cat).
@@ -19,16 +18,16 @@ public class BayesClassifier extends Classifier {
         return product;
     }
  
-    //Calculates the probability that the features can be classified as the
-    //category given.
+    // Calculates the probability that the features can be classified as the
+    // category given.
     private double categoryProbability(Collection<String> features, String category) {
         return ((double) this.categoryCount(category)
                     / (double) this.getCategoriesTotal())
                 * featuresProbabilityProduct(features, category) ;
     }
  
-    //Retrieves a sorted Set of probabilities that the given set
-    //of features is classified as the available categories.
+    // Retrieves a sorted Set of probabilities that the given set
+    // of features is classified as the available categories.
     private SortedSet<Classification> categoryProbabilities(
             Collection<String> features) {
         SortedSet<Classification> probabilities =
